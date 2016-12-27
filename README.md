@@ -5,7 +5,7 @@
 Inspired by [fiche](https://github.com/solusipse/fiche), but with built in HTTP server.
 
 ##Installation
-Download compiled binary form [releases page](github.com/gregory-m/tcp-paste/releases).
+Download compiled binary form [releases page](http://github.com/gregory-m/tcp-paste/releases).
 
 Or if you want to build from source:
 
