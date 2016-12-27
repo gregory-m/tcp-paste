@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/gregory-m/tcp-paste/server"
 )
@@ -43,7 +44,7 @@ func main() {
 	errChan := make(chan error)
 	signalChan := make(chan os.Signal, 1)
 	exit := make(chan bool)
-	signal.Notify(signalChan, os.Interrupt)
+	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
 	go func() {
 		fmt.Printf("Starting TCP server on: %s\n", *tcpHost)
