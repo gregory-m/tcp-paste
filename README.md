@@ -40,3 +40,15 @@ Example:
 $ tcp-paste -hostname example.com -http-host= :80 -tcp-host=443 -storage=/opt/tcp-paste
 ```
 Note: In this example we listen on ports 443 and 80 on linux you can use ``etcap 'cap_net_bind_service=+ep' $(where tcp-paste)``
+
+### Docker images:
+You can use [docker image](https://hub.docker.com/r/gregorym/tcp-paste/).
+
+
+
+For example to listen on ports 443 and 80, and to use host /opt/tcp-paste directory as data storage and example.com as hostname:
+
+```
+$ docker run -p 80:8080 -p 443:4343  -e HOSTNAME=example.com  -v /opt/tcp-paste:/data gregorym/tcp-paste
+```
+
