@@ -1,5 +1,7 @@
 # tcp-paste share terminal output.
 
+[![Build Status](https://travis-ci.org/gregory-m/tcp-paste.svg?branch=master)](https://travis-ci.org/gregory-m/tcp-paste)
+
 Inspired by [fiche](https://github.com/solusipse/fiche), but with built in HTTP server.
 
 ##Installation
