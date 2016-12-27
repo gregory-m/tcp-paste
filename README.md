@@ -14,6 +14,26 @@ $ go get -u github.com/gregory-m/tcp-paste
 ```
 
 ##Usage:
+###Client
+Just pipe output to netcat
+
+```
+$ ps ax | nc tcp-paste.server.com 4343
+```
+
+Multiple commands also supported:
+
+```
+$ (ps ax && ls -la) | nc 127.0.0.1 4343
+```
+
+You can redirect stderr as usual:
+
+```
+ssh -vv some.problemactic.host.com ls 2>&1 | nc 127.0.0.1 4343
+```
+
+###Srever
 ```
 Usage of tcp-paste:
   -hostname string
