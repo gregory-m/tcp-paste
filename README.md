@@ -4,18 +4,12 @@
 
 Inspired by [fiche](https://github.com/solusipse/fiche), but with built in HTTP server.
 
-##Installation
-Download compiled binary form [releases page](http://github.com/gregory-m/tcp-paste/releases).
+![alt text](https://i.imgur.com/M4bmjbt.gif "Logo Title Text 1")
 
-Or if you want to build from source:
 
-```
-$ go get -u github.com/gregory-m/tcp-paste
-```
-
-##Usage:
-###Client
-Just pipe output to netcat
+##Client
+###Usage:
+Just pipe output to netcat:
 
 ```
 $ ps ax | nc tcp-paste.server.com 4343
@@ -24,16 +18,17 @@ $ ps ax | nc tcp-paste.server.com 4343
 Multiple commands also supported:
 
 ```
-$ (ps ax && ls -la) | nc 127.0.0.1 4343
+$ (ps ax && ls -la) | nc tcp-paste.server.com 4343
 ```
 
 You can redirect stderr as usual:
 
 ```
-ssh -vv some.problemactic.host.com ls 2>&1 | nc 127.0.0.1 4343
+ssh -vv some.problemactic.host.com ls 2>&1 | nc tcp-paste.server.com 4343
 ```
 
-###Srever
+##Server
+###Usage:
 ```
 Usage of tcp-paste:
   -hostname string
@@ -61,7 +56,18 @@ $ tcp-paste -hostname example.com -http-host= :80 -tcp-host=443 -storage=/opt/tc
 ```
 Note: In this example we listen on ports 443 and 80 on linux you can use ``etcap 'cap_net_bind_service=+ep' $(where tcp-paste)``
 
-### Docker images:
+###Installation
+Download compiled binary form [releases page](http://github.com/gregory-m/tcp-paste/releases).
+
+Or if you want to build from source:
+
+```
+$ go get -u github.com/gregory-m/tcp-paste
+```
+
+Or you can use docker images.
+
+#### Docker images:
 You can use [docker image](https://hub.docker.com/r/gregorym/tcp-paste/).
 
 
