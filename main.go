@@ -51,7 +51,6 @@ func main() {
 		}
 
 		services = append(services, pasteS)
-		fmt.Printf("Running paste service on %s\n", pasteAddr.String())
 	}
 
 	if *runHTTP {
@@ -68,7 +67,6 @@ func main() {
 		}
 
 		services = append(services, httpS)
-		fmt.Printf("Running HTTP service on %s\n", httpAddr.String())
 	}
 
 	if *runSlack {
@@ -96,7 +94,6 @@ func main() {
 		}
 
 		services = append(services, slcakS)
-		fmt.Printf("Running slack service on %s\n", slackAddr.String())
 	}
 
 	errChan := make(chan error)
@@ -106,9 +103,10 @@ func main() {
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
 	for _, s := range services {
-		go func() {
+		go func(s server.Service) {
+			fmt.Printf("Starting: %s\n", s.Name())
 			errChan <- s.Start()
-		}()
+		}(s)
 	}
 
 	go func() {

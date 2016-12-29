@@ -1,6 +1,9 @@
 package server
 
-import "net"
+import (
+	"fmt"
+	"net"
+)
 
 // TCP is simple TCP server it invokes handler on each tcp connection
 type TCP struct {
@@ -41,4 +44,9 @@ func (s *TCP) Start() error {
 func (s *TCP) Stop() error {
 	s.listener.Close()
 	return nil
+}
+
+//Name a
+func (s *TCP) Name() string {
+	return fmt.Sprintf("TCP.%T on %s", s.Handler, s.Addr.String())
 }

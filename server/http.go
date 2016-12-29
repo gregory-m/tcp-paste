@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -43,4 +44,9 @@ func noDirListing(h http.Handler) http.HandlerFunc {
 // Stop HTTP server
 func (s *HTTP) Stop() error {
 	return nil
+}
+
+//Name a
+func (s *HTTP) Name() string {
+	return fmt.Sprintf("HTTP on %s", s.Host.String())
 }
