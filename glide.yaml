@@ -1,0 +1,4 @@
+package: github.com/gregory-m/tcp-paste
+import:
+- package: github.com/nlopes/slack
+  version: v0.0.1
