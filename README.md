@@ -4,7 +4,7 @@
 
 Inspired by [fiche](https://github.com/solusipse/fiche), but with built in HTTP server and slack support.
 
-![alt text](https://i.imgur.com/M4bmjbt.gif "Logo Title Text 1")
+![Screenshot](https://i.imgur.com/gVMPnTY.gif "Logo Title Text 1")
 
 
 ##Client
@@ -109,4 +109,3 @@ For example to listen on ports 443 and 80, and to use host /opt/tcp-paste direct
 ```
 $ docker run -p 80:8080 -p 443:4343  -e HOSTNAME=example.com  -v /opt/tcp-paste:/data gregorym/tcp-paste
 ```
-
