@@ -113,7 +113,7 @@ func writeAndGetURL(s *server.TCP, input []byte, t *testing.T) *url.URL {
 func newTestConn(s *server.TCP, t *testing.T) *net.TCPConn {
 
 	go s.Start()
-	time.Sleep(1 * time.Millisecond)
+	time.Sleep(10 * time.Millisecond)
 
 	c, err := net.Dial("tcp", "127.0.0.1:4343")
 	if err != nil {

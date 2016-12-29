@@ -17,7 +17,7 @@ func TestUpload(t *testing.T) {
 
 	ts := newSlackTestSerevr(testChannelName)
 	go ts.Start()
-	time.Sleep(2 * time.Millisecond)
+	time.Sleep(10 * time.Millisecond)
 
 	c, err := net.Dial("tcp", "127.0.0.1:9393")
 	if err != nil {
