@@ -39,3 +39,8 @@ func noDirListing(h http.Handler) http.HandlerFunc {
 		h.ServeHTTP(w, r)
 	})
 }
+
+// Stop HTTP server
+func (s *HTTP) Stop() error {
+	return nil
+}

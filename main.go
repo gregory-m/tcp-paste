@@ -8,70 +8,115 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/nlopes/slack"
+
 	"github.com/gregory-m/tcp-paste/handler"
 	"github.com/gregory-m/tcp-paste/server"
 )
 
-// note, that variables are pointers
+var runPaste = flag.Bool("paste", true, "Run paste service (save output on local disk)")
+var pasteHost = flag.String("paste-host", ":4343", "Host and port for post service")
+
+var runHTTP = flag.Bool("http", true, "Run HTTP service (to server saved output from local disk)")
+var httpHost = flag.String("http-host", ":8080", "Host and port for HTTP service")
+
 var storageDir = flag.String("storage", "/tmp", "Storage directory")
-var httpHost = flag.String("http-host", ":8080", "Host and port for HTTP connections")
-var tcpHost = flag.String("tcp-host", ":4343", "Host and port for for TCP connections")
-var hostname = flag.String("hostname", "localhost:8080", "Hostname to use in links")
+var hostName = flag.String("hostname", "localhost:8080", "Hostname to use in links")
+
+var runSlack = flag.Bool("slack", true, "Run Slack service (to post output to slack)")
+var slackHost = flag.String("slack-host", ":9393", "Host and port for slack service")
+var slackToken = flag.String("slack-token", "", "Slack API token")
+var slackChannel = flag.String("slack-chanel", "testa", "Slack API token")
 
 func main() {
 	flag.Parse()
+	var services []server.Service
 
-	tcpAddr, err := net.ResolveTCPAddr("tcp", *tcpHost)
-	if err != nil {
-		fmt.Printf("Can't parse tcp-host falg: %s", err)
+	if *runPaste {
+		pasteAddr, err := net.ResolveTCPAddr("tcp", *pasteHost)
+		if err != nil {
+			fmt.Printf("Can't parse paste-host falg: %s\n", err)
+			os.Exit(1)
+		}
+
+		pasteH := &handler.SaveToDisk{
+			HostName:   *hostName,
+			StorageDir: *storageDir,
+			Prefix:     server.FileServerPrefix,
+		}
+
+		pasteS := &server.TCP{
+			Addr:    pasteAddr,
+			Handler: pasteH,
+		}
+
+		services = append(services, pasteS)
+		fmt.Printf("Running paste service on %s\n", pasteAddr.String())
 	}
 
-	httpAddr, err := net.ResolveTCPAddr("tcp", *httpHost)
-	if err != nil {
-		fmt.Printf("Can't parse http-host falg: %s", err)
+	if *runHTTP {
+		httpAddr, err := net.ResolveTCPAddr("tcp", *httpHost)
+		if err != nil {
+			fmt.Printf("Can't parse http-host falg: %s\n", err)
+			os.Exit(1)
+		}
+
+		httpS := &server.HTTP{
+			Host:       httpAddr,
+			StorageDir: *storageDir,
+			Prefix:     server.FileServerPrefix,
+		}
+
+		services = append(services, httpS)
+		fmt.Printf("Running HTTP service on %s\n", httpAddr.String())
 	}
 
-	saveToDiskH := &handler.SaveToDisk{
-		HostName:   *hostname,
-		StorageDir: *storageDir,
-		Prefix:     server.FileServerPrefix,
-	}
-	tcpS := server.TCP{
-		Addr:    tcpAddr,
-		Handler: saveToDiskH,
-	}
+	if *runSlack {
+		slackAddr, err := net.ResolveTCPAddr("tcp", *slackHost)
+		if err != nil {
+			fmt.Printf("Can't parse slack-host falg: %s\n", err)
+			os.Exit(1)
+		}
 
-	httpS := server.HTTP{
-		Host:       httpAddr,
-		StorageDir: *storageDir,
+		if *slackToken == "" {
+			fmt.Print("Can't run slack service without slack token\n")
+			os.Exit(1)
+		}
+
+		api := slack.New(*slackToken)
+
+		slackH := &handler.Slack{
+			Channel: *slackChannel,
+			API:     api,
+		}
+
+		slcakS := &server.TCP{
+			Addr:    slackAddr,
+			Handler: slackH,
+		}
+
+		services = append(services, slcakS)
+		fmt.Printf("Running slack service on %s\n", slackAddr.String())
 	}
 
 	errChan := make(chan error)
-	signalChan := make(chan os.Signal, 1)
 	exit := make(chan bool)
+
+	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
-	go func() {
-		fmt.Printf("Starting TCP server on: %s\n", *tcpHost)
-		errChan <- tcpS.Start()
-	}()
-
-	go func() {
-		fmt.Printf("Starting HTTP server on: %s\n", *httpHost)
-		errChan <- httpS.Start()
-	}()
+	for _, s := range services {
+		go func() {
+			errChan <- s.Start()
+		}()
+	}
 
 	go func() {
 		for range signalChan {
 			fmt.Print("Interrupted, stopping services...\n")
-			tcpS.Stop()
-			exit <- true
-		}
-	}()
-
-	go func() {
-		for range errChan {
-			fmt.Printf("Received an error: %s\n", err)
+			for _, s := range services {
+				s.Stop()
+			}
 			exit <- true
 		}
 	}()

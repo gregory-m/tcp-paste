@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/gregory-m/tcp-paste.svg?branch=master)](https://travis-ci.org/gregory-m/tcp-paste)
 
-Inspired by [fiche](https://github.com/solusipse/fiche), but with built in HTTP server.
+Inspired by [fiche](https://github.com/solusipse/fiche), but with built in HTTP server and slack support.
 
 ![alt text](https://i.imgur.com/M4bmjbt.gif "Logo Title Text 1")
 
@@ -31,28 +31,60 @@ ssh -vv some.problemactic.host.com ls 2>&1 | nc tcp-paste.server.com 4343
 ###Usage:
 ```
 Usage of tcp-paste:
-  -hostname string
+ -hostname string
     	Hostname to use in links (default "localhost:8080")
+  -http
+    	Run HTTP service (to server saved output from local disk) (default true)
   -http-host string
-    	Host and port for HTTP connections (default ":8080")
+    	Host and port for HTTP service (default ":8080")
+  -paste
+    	Run paste service (save output on local disk) (default true)
+  -paste-host string
+    	Host and port for post service (default ":4343")
+  -slack
+    	Run Slack service (to post output to slack) (default true)
+  -slack-chanel string
+    	Slack API token (default "testa")
+  -slack-host string
+    	Host and port for slack service (default ":9393")
+  -slack-token string
+    	Slack API token
   -storage string
     	Storage directory (default "/tmp")
-  -tcp-host string
-    	Host and port for for TCP connections (default ":4343")
 ```
 
+---
 ``-hostname`` Hostname to uses in links for example if you deploy app to example.com you want to set in to ``example.com``
 
-``-http-host`` HTTP port and host (used to view saved outputs) to listen on in flowing format: ``host:port`` if host part is omitted ``0.0.0.0`` will be used.
-
-``-tcp-host`` TCP port and host (used to saved output) to listen on in flowing format: ``host:port`` if host part is omitted ``0.0.0.0`` will be used.
-
 ``-storage`` Storage directory usually you want to set it to something different then ``/tmp`` to preserve saved files after reboot.
+
+---
+
+``-http`` Run http service to serve saved files
+
+``-http-host`` HTTP service port and host in flowing format: ``host:port`` if host part is omitted ``0.0.0.0`` will be used.
+
+---
+``-paste`` Run paste service, listen to connections and save input to disk
+
+``-paste-host`` Paste service port and host in flowing format: ``host:port`` if host part is omitted ``0.0.0.0`` will be used.
+
+---
+``-slack`` Run slack service to listen to connections and post input to slack.
+
+``-slack-host`` Slack service port and host in flowing format: ``host:port`` if host part is omitted ``0.0.0.0`` will be used.
+
+``-slack-token`` Slack API token.
+
+``-slack-chanel`` Slack channel to post
+
+
+
 
 Example:
 
 ```
-$ tcp-paste -hostname example.com -http-host= :80 -tcp-host=443 -storage=/opt/tcp-paste
+$ -hostname example.com -storage=/opt/tcp-paste -http-host:80 -paste-host=443 -slack-host=993 -slack-token="very-secret" -slack-chanel=general
 ```
 Note: In this example we listen on ports 443 and 80 on linux you can use ``etcap 'cap_net_bind_service=+ep' $(where tcp-paste)``
 
