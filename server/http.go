@@ -10,11 +10,12 @@ import (
 type HTTP struct {
 	StorageDir string
 	Host       *net.TCPAddr
+	Prefix     string
 }
 
 // Start http server
 func (s *HTTP) Start() error {
-	http.Handle(fileServerPrefix, serveStatic(s.StorageDir))
+	http.Handle(FileServerPrefix, serveStatic(s.StorageDir))
 	http.HandleFunc("/", homePage)
 
 	return http.ListenAndServe(s.Host.String(), nil)
@@ -26,7 +27,7 @@ func homePage(w http.ResponseWriter, req *http.Request) {
 }
 
 func serveStatic(dir string) http.Handler {
-	return noDirListing(http.StripPrefix(fileServerPrefix, http.FileServer(http.Dir(dir))))
+	return noDirListing(http.StripPrefix(FileServerPrefix, http.FileServer(http.Dir(dir))))
 }
 
 func noDirListing(h http.Handler) http.HandlerFunc {

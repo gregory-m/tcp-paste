@@ -13,7 +13,7 @@ func TestStaticServe(t *testing.T) {
 	tf := createTestFile()
 	defer os.Remove(tf)
 
-	req, _ := http.NewRequest("GET", path.Join(fileServerPrefix, path.Base(tf)), nil)
+	req, _ := http.NewRequest("GET", path.Join(FileServerPrefix, path.Base(tf)), nil)
 	w := httptest.NewRecorder()
 
 	serveStatic("/tmp").ServeHTTP(w, req)
@@ -27,7 +27,7 @@ func TestNotDirListings(t *testing.T) {
 	tf := createTestFile()
 	defer os.Remove(tf)
 
-	req, _ := http.NewRequest("GET", fileServerPrefix+"/", nil)
+	req, _ := http.NewRequest("GET", FileServerPrefix+"/", nil)
 	w := httptest.NewRecorder()
 
 	serveStatic("/tmp").ServeHTTP(w, req)

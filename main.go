@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/gregory-m/tcp-paste/handler"
 	"github.com/gregory-m/tcp-paste/server"
 )
 
@@ -30,10 +31,14 @@ func main() {
 		fmt.Printf("Can't parse http-host falg: %s", err)
 	}
 
-	tcpS := server.TCP{
-		Host:       tcpAddr,
-		StorageDir: *storageDir,
+	saveToDiskH := &handler.SaveToDisk{
 		HostName:   *hostname,
+		StorageDir: *storageDir,
+		Prefix:     server.FileServerPrefix,
+	}
+	tcpS := server.TCP{
+		Addr:    tcpAddr,
+		Handler: saveToDiskH,
 	}
 
 	httpS := server.HTTP{
