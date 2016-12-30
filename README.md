@@ -107,5 +107,7 @@ You can use [docker image](https://hub.docker.com/r/gregorym/tcp-paste/).
 For example to listen on ports 443 and 80, and to use host /opt/tcp-paste directory as data storage and example.com as hostname:
 
 ```
-$ docker run -p 80:8080 -p 443:4343  -e HOSTNAME=example.com  -v /opt/tcp-paste:/data gregorym/tcp-paste
+$ docker run -p 80:8080 -p 443:4343 -p 993:9393 -e HOSTNAME=gregory.beer \
+-e SLACK_TOKEN=very-secret -e SLACK_CHANNEL=testa \
+-v /opt/tcp-paste:/data gregorym/tcp-paste
 ```
