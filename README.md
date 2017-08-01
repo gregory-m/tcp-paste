@@ -7,8 +7,8 @@ Inspired by [fiche](https://github.com/solusipse/fiche), but with built in HTTP 
 ![Screenshot](https://i.imgur.com/gVMPnTY.gif "Logo Title Text 1")
 
 
-##Client
-###Usage:
+## Client
+### Usage:
 Just pipe output to netcat:
 
 ```
@@ -27,8 +27,8 @@ You can redirect stderr as usual:
 ssh -vv some.problemactic.host.com ls 2>&1 | nc tcp-paste.server.com 4343
 ```
 
-##Server
-###Usage:
+## Server
+### Usage:
 ```
 Usage of tcp-paste:
  -hostname string
@@ -88,7 +88,7 @@ $ -hostname example.com -storage=/opt/tcp-paste -http-host:80 -paste-host=443 -s
 ```
 Note: In this example we listen on ports 443 and 80 on linux you can use ``etcap 'cap_net_bind_service=+ep' $(where tcp-paste)``
 
-###Installation
+### Installation
 Download compiled binary form [releases page](http://github.com/gregory-m/tcp-paste/releases).
 
 Or if you want to build from source:
