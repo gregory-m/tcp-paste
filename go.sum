@@ -1,0 +1,4 @@
+github.com/nlopes/slack v0.0.1 h1:TyFfv41qapa3DVcEVsvff3wuOcbKaK8T9UU4JMoOa88=
+github.com/nlopes/slack v0.0.1/go.mod h1:jVI4BBK3lSktibKahxBF74txcK2vyvkza1z/+rRnVAM=
+golang.org/x/net v0.0.0-20161013035702-8b4af36cd21a h1:YEFEcqrj8fWeC0px2Ha5IrK20xodii3wn+N+jzuFRKQ=
+golang.org/x/net v0.0.0-20161013035702-8b4af36cd21a/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
