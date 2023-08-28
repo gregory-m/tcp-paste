@@ -1,16 +1,22 @@
-FROM alpine:3.4
-MAINTAINER Gregory Man <man.gregory@gmail.com>
+FROM golang:1.20 as build
+LABEL org.opencontainers.image.authors="Gregory Man <man.gregory@gmail.com>"
 
-COPY tcp-paste-linux-amd64 /tcp-paste
-EXPOSE 8080 4343 9393
+WORKDIR /src
+COPY . .
+RUN go mod download
+RUN CGO_ENABLED=0 GOOS=linux go build -o /tcp-paste
 
+
+FROM alpine
+COPY --from=build /tcp-paste /tcp-paste
 RUN apk add --update ca-certificates && rm -rf /var/cache/apk/*
-
 RUN mkdir /data
 VOLUME /data
 
 ENV HOSTNAME localhost:8080
 ENV SLACK_TOKEN ""
 ENV SLACK_CHANNEL test
+
+EXPOSE 8080 4343 9393
 
 CMD ["sh", "-c", "exec /tcp-paste -storage=/data -hostname=${HOSTNAME} -slack-token=${SLACK_TOKEN} -slack-chanel=${SLACK_CHANNEL}"]
