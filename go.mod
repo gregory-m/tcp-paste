@@ -4,4 +4,4 @@ go 1.20
 
 require github.com/nlopes/slack v0.0.1
 
-require golang.org/x/net v0.14.0 // indirect
+require golang.org/x/net v0.17.0 // indirect
