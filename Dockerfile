@@ -1,4 +1,4 @@
-FROM golang:1.20 as build
+FROM golang:1.24 AS build
 LABEL org.opencontainers.image.authors="Gregory Man <man.gregory@gmail.com>"
 
 WORKDIR /src
@@ -13,9 +13,8 @@ RUN apk add --update ca-certificates && rm -rf /var/cache/apk/*
 RUN mkdir /data
 VOLUME /data
 
-ENV HOSTNAME localhost:8080
-ENV SLACK_TOKEN ""
-ENV SLACK_CHANNEL test
+ENV HOSTNAME=localhost:8080
+ENV SLACK_CHANNEL=test
 
 EXPOSE 8080 4343 9393
 
